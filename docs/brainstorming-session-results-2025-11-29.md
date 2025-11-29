@@ -394,6 +394,32 @@ _Ideias prontas para implementar agora - validam o modelo_
    - Reduz ansiedade e pedidos de atualização
    - Diferencial competitivo claro
 
+**🎯 MVP ADDITIONS - Competitive Gap Analysis:**
+
+5. **Sistema de Escrow/Milestone Payments**
+   - Cliente paga % upfront, designer recebe após aprovação
+   - Proteção mútua: incentiva qualidade + segurança financeira
+   - Inspirado em: Easy Render (25% adiantado)
+   - Essencial para marketplace confiável
+
+6. **Sistema de Notificações Integrado**
+   - Notificações in-app + email + push para eventos críticos
+   - Eventos: entrega, aprovação, ajustes solicitados, pagamentos
+   - Mantém engajamento sem depender de e-mail externo
+   - Inspirado em: Easy Render (ferramentas proprietárias)
+
+7. **Workflow Guide para Clientes**
+   - Documento/página explicando cada nível (0-7) do processo
+   - O que acontece em cada etapa, o que esperar, quanto tempo
+   - Educa cliente, reduz ansiedade, manage expectations
+   - Inspirado em: Binyan Studios (workflow documentado)
+
+8. **Suporte a Arquivos BIM (Revit, ArchiCAD)**
+   - Upload de arquivos nativos BIM no onboarding
+   - Acelera modelagem, mantém precisão técnica
+   - Atrai clientes profissionais (arquitetos, engenheiros)
+   - Inspirado em: Binyan Studios (integração Revit)
+
 **Também MVP (Base Funcional):**
 - Plataforma híbrida (web + app mobile)
 - Multi-onboarding (formulário, chatbot, consulta, IA)
@@ -432,6 +458,13 @@ _Ideias que precisam desenvolvimento mas têm alto potencial_
    - Designers recebem automaticamente após aprovação
    - Plataforma retém % da transação
    - Elimina fricção financeira para designers
+
+5. **AI Project Advisor (Insights Proativos)** 🔥
+   - IA sugere ações operacionais baseadas em dados
+   - Exemplos: "Projeto X atrasando, realocar designer Y", "Cliente Z satisfeito, upsell VR"
+   - Proativo > Reativo: OF3D opera mais inteligentemente
+   - Diferencial único (nenhum concorrente oferece)
+   - Inspirado em: Scoro (mas OF3D pode fazer melhor para archviz)
 
 **Também Futuro:**
 - Portfólio público dos designers (LinkedIn-style)
@@ -537,7 +570,21 @@ _Realizações-chave da sessão de brainstorming_
 
 ## Action Planning
 
-### Top 3 Priority Ideas
+**📢 ATUALIZAÇÃO - COMPETITIVE GAP ANALYSIS:**
+
+Com base na análise de concorrentes, identificamos **4 features essenciais** para adicionar ao MVP:
+- Sistema de Escrow/Milestone Payments
+- Sistema de Notificações Integrado
+- Workflow Guide para Clientes
+- Suporte a Arquivos BIM
+
+Essas features complementam as TOP 3 priorities originais, totalizando **8 features MVP essenciais**.
+
+Além disso, **AI Project Advisor** foi identificado como alta prioridade para Future (diferencial único).
+
+---
+
+### Top 3 Priority Ideas (Original)
 
 #### #1 Priority: Match Automático por IA
 

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx bmad-method@alpha install:*)",
+      "Bash(if not exist \"C:\\Users\\carlos.wolfart\\Repos\\IA\\docs\" mkdir \"C:\\Users\\carlos.wolfart\\Repos\\IA\\docs\")",
+      "Bash(mkdir:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nSessão de brainstorming - Técnicas 1 e 2 concluídas\n\n- First Principles: Identificadas verdades fundamentais sobre imersão\n- What If Scenarios: Conceito da Plataforma OF3D definido\n- Arquitetura completa: Marketplace + Gamificação + Academy\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

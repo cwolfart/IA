@@ -145,6 +145,149 @@
 
 ---
 
+### Sessão 3: SCAMPER Method (Estruturada)
+
+**Objetivo:** Aplicar 7 lentes sistemáticas de inovação sobre o conceito da plataforma para gerar variações e melhorias.
+
+---
+
+#### 🔄 S - SUBSTITUIR
+
+**Substituições Aprovadas para MVP:**
+
+1. **Match Automático por IA:** Sistema inteligente analisa perfil + histórico + especialidade do designer e aloca automaticamente (elimina candidatura manual, mais eficiente)
+
+2. **Designer IA (Pré-validação):** IA faz primeira verificação técnica/qualidade antes de enviar para cliente, mas cliente sempre aprova etapas (mantém alinhamento de expectativas + reduz retrabalho)
+
+3. **Pricing Dinâmico:** Modelo tipo Uber - preço baseado em demanda, urgência, complexidade do projeto (maximiza receita e otimiza capacidade da rede)
+
+---
+
+#### 🔗 C - COMBINAR
+
+**Combinações Aprovadas:**
+
+1. **Academy + Plataforma (Pipeline de Talentos):**
+   - Alunos OF3D Academy ganham acesso gratuito à plataforma por tempo determinado durante o curso
+   - Ao concluir curso, entram automaticamente como designers nível 1
+   - Garante supply constante de designers certificados
+
+2. **Marketplace de Trabalho:**
+   - Designers vendem seu trabalho através da plataforma
+   - OF3D gerencia todo processo comercial, contratos, faturamento e repasse
+   - Plataforma fica com % da transação
+
+3. **IA Generativa como Preview Rápido:**
+   - Cliente faz upload de foto do terreno/planta
+   - IA gera visualização prévia instantânea
+   - Preview passa para designer revisar/refinar/aprovar antes de mostrar ao cliente
+   - Acelera onboarding + alinha expectativas desde o início
+
+**BACKLOG:**
+- Gamificação + Comunidade (desafios mensais, badges, networking)
+
+---
+
+#### 🔄 A - ADAPTAR
+
+**Adaptações de Outros Mercados:**
+
+1. **Modelo Uber/99 (Tracking em Tempo Real):**
+   - Cliente acompanha status do projeto ao vivo
+   - "Designer João está na etapa de Iluminação... 75% completo"
+   - Transparência total + reduz ansiedade do cliente
+
+2. **Modelo LinkedIn (Portfólio Público):**
+   - Cada designer tem perfil público com portfólio na plataforma
+   - Projetos concluídos viram showcase
+   - Atrai clientes diretamente + valoriza designers de alto nível
+   - Marketing orgânico
+
+---
+
+#### 📐 M - MODIFICAR / MAGNIFICAR
+
+**MVP:**
+- Plataforma base funcionando
+
+**Pacotes Adicionais (Monetização):**
+- **Experiência VR Navegável:** Upgrade premium que cliente pode adquirir junto com projeto de visualização
+
+**BACKLOG (Features Premium Futuras):**
+- Tour virtual interativo pronto para site do cliente
+- Categorias especiais acima do nível 7 (Hall da Fama OF3D)
+- Making-of cinematográfico do processo criativo (diferencial nível 7)
+
+---
+
+#### 🔀 P - PROPOR OUTROS USOS
+
+**Novos Mercados (Potencial Futuro):**
+
+1. **Retrofit/Reformas:** Além de construções novas, atender mercado de reformas
+2. **Hotéis/Resorts:** Visualização de experiências de hospitalidade
+3. **Design de Produto/Móveis:** Expandir além de arquitetura
+4. **Prefeituras/Projetos Urbanos:** Visualização para setor público e licenciamentos
+
+**BACKLOG:**
+- Versão B2C para pessoas físicas reformando casa própria
+
+---
+
+#### ✂️ E - ELIMINAR (Simplificação para MVP)
+
+**Decisões de Simplificação:**
+
+1. **Escopo Inicial Focado:** MVP concentra apenas em **Ilustração 3D**
+   - Animação e VR ficam como pacotes adicionais
+   - Valida modelo de negócio antes de expandir serviços
+
+2. **Aprovações Flexíveis:** Customizável por projeto
+   - Cliente pode escolher: aprovar cada etapa OU só aprovação final
+   - Combinar com cliente na fase comercial
+
+**BACKLOG:**
+- Customização avançada de pacotes (começa com pacotes fixos)
+
+**Questão em Aberto:** Começar com 3 níveis (Júnior/Pleno/Senior) ou manter 7 níveis desde o início?
+
+---
+
+#### 🔄 R - REVERTER / REORGANIZAR
+
+**Inversões Estratégicas:**
+
+1. **Prospecção Ativa (Outbound):**
+   - Plataforma não só recebe demanda passiva
+   - Sistema identifica potenciais clientes e sugere projetos proativamente
+   - Crescimento ativo via outbound comercial
+
+2. **Pagamento Flexível por Perfil:**
+   - Depende do pacote, nível de serviço e perfil do cliente
+   - Pode ser: adiantado, parcelado, ou após aprovação
+   - Estratégia comercial adaptável
+
+3. **Fluxo Sequencial Mantido:**
+   - Rejeitada ideia de trabalho paralelo em etapas
+   - Confirmado: cada nível depende do anterior
+   - Desenho evolui progressivamente (0→1→2→...→7)
+
+**BACKLOG:**
+- Designers proporem projetos especulativos para venda
+
+---
+
+**🎯 REFINAMENTOS-CHAVE DO SCAMPER:**
+
+- IA como assistente (match, pré-validação, preview) mas humano sempre decide
+- Academy integrada como pipeline de talentos
+- Pricing dinâmico maximiza receita
+- Tracking em tempo real aumenta confiança do cliente
+- MVP focado (só ilustração 3D) para validar antes de expandir
+- Múltiplos mercados futuros identificados (retrofit, hotéis, produto, urbano)
+
+---
+
 {{technique_sessions}}
 
 ## Idea Categorization

@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Discovery - OF3D Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-time {
+            font-size: 12px;
+            color: #999;
+            font-weight: normal;
+            margin-left: auto;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .question-sublabel {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover,
+        .radio-item:hover {
+            background: #f0f0f0;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .scale-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .scale-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scale-item input[type="radio"] {
+            display: none;
+        }
+
+        .scale-item input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+        }
+
+        .scale-item:hover {
+            border-color: #667eea;
+        }
+
+        .scale-item label {
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .progress-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            z-index: 100;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .progress-fill {
+            height: 6px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .scale-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .impact-frequency {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .sub-question {
+            margin-left: 20px;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            <div class="progress-text" id="progressText">0% Completo</div>
+        </div>
+
+        <div class="header">
+            <h1>🎯 Customer Discovery Interview</h1>
+            <p class="subtitle">OF3D Platform - Formulário de 30 Minutos</p>
+        </div>
+
+        <div class="alert alert-info">
+            <h3 style="margin-bottom: 10px;">📖 Sobre Esta Entrevista</h3>
+            <p style="margin-bottom: 10px;">
+                Estamos conduzindo uma pesquisa para entender os desafios reais que profissionais como você enfrentam ao trabalhar com visualização arquitetônica e renderização 3D.
+            </p>
+            <p style="margin-bottom: 10px;">
+                <strong>O que vamos conversar:</strong>
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 10px;">
+                <li>Como você trabalha com visualização 3D hoje</li>
+                <li>Principais desafios e frustrações no processo</li>
+                <li>O que seria o processo ideal para você</li>
+                <li>Validar algumas ideias de soluções</li>
+            </ul>
+            <p style="margin-bottom: 0;">
+                <strong>⚠️ Importante:</strong> Não estamos vendendo nada. Queremos apenas entender suas dores reais para construir uma solução que realmente faça sentido. Suas respostas honestas são fundamentais!
+            </p>
+        </div>
+
+        <form id="interviewForm">
+            <!-- DADOS DA ENTREVISTA -->
+            <div class="section">
+                <h2 class="section-title">📋 Dados da Entrevista</h2>
+
+                <div class="grid-2">
+                    <div class="question">
+                        <label class="question-label">Código <span class="required">*</span></label>
+                        <input type="text" name="codigo" id="codigo" placeholder="Ex: CD-002" required>
+                    </div>
+
+                    <div class="question">
+                        <label class="question-label">Data <span class="required">*</span></label>
+                        <input type="date" name="data" required>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="question">
+                        <label class="question-label">Duração (minutos)</label>
+                        <input type="number" name="duracao" placeholder="Ex: 28">
+                    </div>
+
+                    <div class="question">
+                        <label class="question-label">Entrevistador <span class="required">*</span></label>
+                        <input type="text" name="entrevistador" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERFIL DO ENTREVISTADO -->
+            <div class="section">
+                <h2 class="section-title">👤 Perfil do Entrevistado</h2>
+
+                <div class="question">
+                    <label class="question-label">Nome <span class="required">*</span></label>
+                    <input type="text" name="nome" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="question">
+                        <label class="question-label">Empresa <span class="required">*</span></label>
+                        <input type="text" name="empresa" required>
+                    </div>
+
+                    <div class="question">
+                        <label class="question-label">Cargo <span class="required">*</span></label>
+                        <input type="text" name="cargo" required>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Segmento <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="segmento" value="Incorporadora" required>
+                            <span>Incorporadora</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="segmento" value="Construtora">
+                            <span>Construtora</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="segmento" value="Arquiteto">
+                            <span>Arquiteto</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="segmento" value="Designer">
+                            <span>Designer</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="segmento" value="Outro">
+                            <span>Outro</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Frequência de uso de visualização 3D</label>
+                    <select name="frequencia">
+                        <option value="">Selecione...</option>
+                        <option value="Semanal">Semanal</option>
+                        <option value="Mensal">Mensal</option>
+                        <option value="Trimestral">Trimestral</option>
+                        <option value="Semestral">Semestral</option>
+                        <option value="Anual">Anual</option>
+                        <option value="Não usa">Não usa</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Budget anual estimado para visualização 3D</label>
+                    <select name="budget">
+                        <option value="">Selecione...</option>
+                        <option value="Menos de R$ 10k">Menos de R$ 10k</option>
+                        <option value="R$ 10-50k">R$ 10-50k</option>
+                        <option value="R$ 50-100k">R$ 50-100k</option>
+                        <option value="R$ 100-500k">R$ 100-500k</option>
+                        <option value="Mais de R$ 500k">Mais de R$ 500k</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 1: CONTEXTO -->
+            <div class="section">
+                <h2 class="section-title">
+                    🎯 Seção 1: Contexto e Uso Atual
+                    <span class="section-time">(5 min)</span>
+                </h2>
+
+                <div class="question">
+                    <label class="question-label">Descreva brevemente o último projeto de visualização 3D</label>
+                    <textarea name="ultimo_projeto" rows="3" placeholder="Tipo de projeto, quando foi, resultado..."></textarea>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Como você escolhe/encontra fornecedores? (pode marcar múltiplos)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="como_encontra" value="Indicação">
+                            <span>Indicação</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="como_encontra" value="Google/Busca online">
+                            <span>Google/Busca online</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="como_encontra" value="Fornecedores recorrentes">
+                            <span>Fornecedores recorrentes</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="como_encontra" value="Portfólio/Instagram">
+                            <span>Portfólio/Instagram</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="como_encontra" value="Plataformas online">
+                            <span>Plataformas online</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: PRINCIPAIS DORES -->
+            <div class="section">
+                <h2 class="section-title">
+                    🔥 Seção 2: Principais Dores
+                    <span class="section-time">(8 min)</span>
+                </h2>
+
+                <div class="question">
+                    <label class="question-label">1º MAIOR DESAFIO <span class="required">*</span></label>
+                    <textarea name="desafio_1" rows="3" required placeholder="Descreva o maior desafio..."></textarea>
+
+                    <div class="impact-frequency">
+                        <div>
+                            <label style="font-size: 13px; display: block; margin-bottom: 5px;">Impacto:</label>
+                            <select name="desafio_1_impacto">
+                                <option value="Alto">Alto</option>
+                                <option value="Médio">Médio</option>
+                                <option value="Baixo">Baixo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; display: block; margin-bottom: 5px;">Frequência:</label>
+                            <select name="desafio_1_frequencia">
+                                <option value="Sempre">Sempre</option>
+                                <option value="Frequente">Frequente</option>
+                                <option value="Às vezes">Às vezes</option>
+                                <option value="Raro">Raro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">2º MAIOR DESAFIO</label>
+                    <textarea name="desafio_2" rows="3" placeholder="Descreva o segundo maior desafio..."></textarea>
+
+                    <div class="impact-frequency">
+                        <div>
+                            <label style="font-size: 13px; display: block; margin-bottom: 5px;">Impacto:</label>
+                            <select name="desafio_2_impacto">
+                                <option value="">-</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Médio">Médio</option>
+                                <option value="Baixo">Baixo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; display: block; margin-bottom: 5px;">Frequência:</label>
+                            <select name="desafio_2_frequencia">
+                                <option value="">-</option>
+                                <option value="Sempre">Sempre</option>
+                                <option value="Frequente">Frequente</option>
+                                <option value="Às vezes">Às vezes</option>
+                                <option value="Raro">Raro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">3º MAIOR DESAFIO</label>
+                    <textarea name="desafio_3" rows="3" placeholder="Descreva o terceiro maior desafio..."></textarea>
+
+                    <div class="impact-frequency">
+                        <div>
+                            <label style="font-size: 13px; display: block; margin-bottom: 5px;">Impacto:</label>
+                            <select name="desafio_3_impacto">
+                                <option value="">-</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Médio">Médio</option>
+                                <option value="Baixo">Baixo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; display: block; margin-bottom: 5px;">Frequência:</label>
+                            <select name="desafio_3_frequencia">
+                                <option value="">-</option>
+                                <option value="Sempre">Sempre</option>
+                                <option value="Frequente">Frequente</option>
+                                <option value="Às vezes">Às vezes</option>
+                                <option value="Raro">Raro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Problemas com qualidade das entregas?</label>
+                    <select name="problema_qualidade" id="problema_qualidade">
+                        <option value="">Selecione...</option>
+                        <option value="Sim, frequentemente">Sim, frequentemente</option>
+                        <option value="Sim, algumas vezes">Sim, algumas vezes</option>
+                        <option value="Raramente">Raramente</option>
+                        <option value="Nunca">Nunca</option>
+                    </select>
+
+                    <div class="sub-question" id="qualidade_detalhes" style="display: none;">
+                        <label class="question-label">Que tipo de problema?</label>
+                        <textarea name="qualidade_detalhes" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Como você acompanha o progresso hoje?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="acompanhamento" value="WhatsApp/mensagens">
+                            <span>WhatsApp/mensagens</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="acompanhamento" value="Email">
+                            <span>Email</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="acompanhamento" value="Telefone">
+                            <span>Telefone</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="acompanhamento" value="Plataforma do fornecedor">
+                            <span>Plataforma do fornecedor</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="acompanhamento" value="Não acompanho">
+                            <span>Não acompanho, só espero entrega</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Visibilidade do processo</label>
+                    <select name="visibilidade">
+                        <option value="">Selecione...</option>
+                        <option value="Sim, total">Sim, total visibilidade</option>
+                        <option value="Parcialmente">Parcialmente</option>
+                        <option value="Não, fico no escuro">Não, fico no escuro</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">A precificação é clara e previsível?</label>
+                    <select name="pricing_clareza">
+                        <option value="">Selecione...</option>
+                        <option value="Sim, muito clara">Sim, muito clara</option>
+                        <option value="Mais ou menos">Mais ou menos</option>
+                        <option value="Não, confusa/opaca">Não, confusa/opaca</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Rodadas de ajustes típicas</label>
+                    <select name="rodadas_ajuste">
+                        <option value="">Selecione...</option>
+                        <option value="1-2 rodadas">1-2 rodadas</option>
+                        <option value="3-4 rodadas">3-4 rodadas</option>
+                        <option value="5+ rodadas">5+ rodadas</option>
+                        <option value="Varia muito">Varia muito</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: VALIDAÇÃO DE HIPÓTESES -->
+            <div class="section">
+                <h2 class="section-title">
+                    ✅ Seção 3: Validação de Hipóteses
+                    <span class="section-time">(10 min)</span>
+                </h2>
+
+                <div class="question">
+                    <label class="question-label">Match Automático de Designer</label>
+                    <span class="question-sublabel">"Sistema inteligente que analisa seu projeto e automaticamente aloca o designer mais adequado"</span>
+                    <select name="match_automatico">
+                        <option value="">Selecione...</option>
+                        <option value="Adoraria isso">Adoraria isso</option>
+                        <option value="Gostaria, mas com opção manual">Gostaria, mas com opção de escolher manualmente</option>
+                        <option value="Prefiro escolher manualmente">Prefiro escolher manualmente sempre</option>
+                        <option value="Indiferente">Indiferente</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Sistema de Níveis (0-7)</label>
+                    <span class="question-sublabel">"Designers precisam de 100 entregas excelentes para subir de nível"</span>
+                    <select name="sistema_niveis">
+                        <option value="">Selecione...</option>
+                        <option value="Muito importante">Muito importante - daria muito mais confiança</option>
+                        <option value="Importante">Importante - ajudaria na decisão</option>
+                        <option value="Pouco importante">Pouco importante</option>
+                        <option value="Não faz diferença">Não faz diferença</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Tracking em Tempo Real</label>
+                    <span class="question-sublabel">"Tipo Uber: 'Designer João - Iluminação 75% completo'"</span>
+                    <select name="tracking_tempo_real">
+                        <option value="">Selecione...</option>
+                        <option value="Sim, diariamente">Sim, usaria diariamente</option>
+                        <option value="Sim, algumas vezes">Sim, algumas vezes por semana</option>
+                        <option value="Raramente">Raramente</option>
+                        <option value="Não usaria">Não usaria</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Pricing Dinâmico</label>
+                    <span class="question-sublabel">"Preço varia como Uber: projeto urgente = preço maior, prazo flexível = preço menor"</span>
+                    <select name="pricing_dinamico">
+                        <option value="">Selecione...</option>
+                        <option value="Justo e faz sentido">Justo e faz sentido</option>
+                        <option value="Aceitável se transparente">Aceitável se houver transparência</option>
+                        <option value="Não gosto">Não gosto, prefiro preço fixo</option>
+                        <option value="Depende da variação">Depende da variação de preço</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Sistema de Escrow (Pagamento Seguro)</label>
+                    <span class="question-sublabel">"Você paga X% inicial, restante retido até aprovação final"</span>
+                    <select name="escrow">
+                        <option value="">Selecione...</option>
+                        <option value="Muito interessante">Muito interessante</option>
+                        <option value="Interessante">Interessante</option>
+                        <option value="Indiferente">Indiferente</option>
+                        <option value="Prefiro modelo atual">Prefiro modelo atual</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Workflow Guide</label>
+                    <span class="question-sublabel">"Documento explicando cada etapa do processo (0-7)"</span>
+                    <select name="workflow_guide">
+                        <option value="">Selecione...</option>
+                        <option value="Muito útil">Muito útil</option>
+                        <option value="Útil">Útil</option>
+                        <option value="Pouco útil">Pouco útil</option>
+                        <option value="Não preciso">Não preciso</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Notificações Automáticas (pode marcar múltiplas)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="notificacoes" value="Designer começou">
+                            <span>Designer começou o trabalho</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="notificacoes" value="Etapa concluída">
+                            <span>Etapa concluída</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="notificacoes" value="Aguardando aprovação">
+                            <span>Aguardando sua aprovação</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="notificacoes" value="Projeto finalizado">
+                            <span>Projeto finalizado</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="notificacoes" value="Nenhuma">
+                            <span>Nenhuma (prefiro não ser notificado)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Trabalha com arquivos BIM?</label>
+                    <select name="usa_bim" id="usa_bim">
+                        <option value="">Selecione...</option>
+                        <option value="Sim, Revit">Sim, Revit</option>
+                        <option value="Sim, ArchiCAD">Sim, ArchiCAD</option>
+                        <option value="Sim, SketchUp">Sim, SketchUp</option>
+                        <option value="Sim, outro">Sim, outro</option>
+                        <option value="Não">Não trabalho com BIM</option>
+                    </select>
+
+                    <div class="sub-question" id="bim_importancia" style="display: none;">
+                        <label class="question-label">Importância de suporte BIM nativo</label>
+                        <select name="bim_importancia">
+                            <option value="">Selecione...</option>
+                            <option value="Crítico">Crítico</option>
+                            <option value="Importante">Importante</option>
+                            <option value="Bom ter">Bom ter</option>
+                            <option value="Não importante">Não importante</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: SOLUÇÃO IDEAL -->
+            <div class="section">
+                <h2 class="section-title">
+                    💡 Seção 4: Solução Ideal
+                    <span class="section-time">(5 min)</span>
+                </h2>
+
+                <div class="question">
+                    <label class="question-label">1ª Característica Essencial do Processo PERFEITO</label>
+                    <textarea name="solucao_ideal_1" rows="2" placeholder="Primeira característica mais importante..."></textarea>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">2ª Característica Essencial</label>
+                    <textarea name="solucao_ideal_2" rows="2" placeholder="Segunda característica mais importante..."></textarea>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">3ª Característica Essencial</label>
+                    <textarea name="solucao_ideal_3" rows="2" placeholder="Terceira característica mais importante..."></textarea>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Willingness to Pay: Se resolvesse seus 3 maiores desafios, pagaria:</label>
+                    <select name="willingness_to_pay">
+                        <option value="">Selecione...</option>
+                        <option value="Mesma coisa">Mesma coisa (R$ 0 a mais)</option>
+                        <option value="10% a mais">10% a mais</option>
+                        <option value="20% a mais">20% a mais</option>
+                        <option value="30-50% a mais">30-50% a mais</option>
+                        <option value="Mais que 50%">Mais que 50% a mais</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Por quê?</label>
+                    <textarea name="willingness_justificativa" rows="2" placeholder="Justifique sua resposta..."></textarea>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: ENCERRAMENTO -->
+            <div class="section">
+                <h2 class="section-title">
+                    🎯 Seção 5: Encerramento
+                    <span class="section-time">(2 min)</span>
+                </h2>
+
+                <div class="question">
+                    <label class="question-label">Se a plataforma existisse, você:</label>
+                    <select name="interesse_testar">
+                        <option value="">Selecione...</option>
+                        <option value="Definitivamente testaria">Definitivamente testaria</option>
+                        <option value="Provavelmente testaria">Provavelmente testaria</option>
+                        <option value="Talvez testaria">Talvez testaria</option>
+                        <option value="Provavelmente não">Provavelmente não</option>
+                        <option value="Definitivamente não">Definitivamente não</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Indicações (pessoas/empresas para entrevistar)</label>
+                    <textarea name="indicacoes" rows="3" placeholder="Nome, empresa, contato..."></textarea>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Interesse em acompanhar o projeto</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="followup" value="Quero updates">
+                            <span>Quero receber updates sobre a plataforma</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="followup" value="Beta tester">
+                            <span>Interesse em participar de beta/testes</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="followup" value="Design partner">
+                            <span>Interesse em design partnership</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Email para contato</label>
+                    <input type="email" name="email_contato" placeholder="email@empresa.com">
+                </div>
+            </div>
+
+            <!-- ANÁLISE PÓS-ENTREVISTA -->
+            <div class="section">
+                <h2 class="section-title">📊 Análise Pós-Entrevista (Interno)</h2>
+
+                <div class="question">
+                    <label class="question-label">Early Adopter Score</label>
+                    <select name="early_adopter_score">
+                        <option value="">Selecione...</option>
+                        <option value="Alto">Alto - Dor forte + budget + disposição a testar</option>
+                        <option value="Médio">Médio - Interesse moderado</option>
+                        <option value="Baixo">Baixo - Pouca dor ou resistente a mudança</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Insights/Descobertas Únicas</label>
+                    <textarea name="insights" rows="4" placeholder="Anotações importantes, descobertas inesperadas..."></textarea>
+                </div>
+
+                <div class="question">
+                    <label class="question-label">Quotes Memoráveis (citações textuais importantes)</label>
+                    <textarea name="quotes" rows="3" placeholder="&quot;Citações textuais relevantes...&quot;"></textarea>
+                </div>
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="saveProgress()">💾 Salvar Progresso</button>
+                <button type="submit" class="btn btn-primary">📥 Gerar Arquivo Final</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Auto-save to localStorage
+        const form = document.getElementById('interviewForm');
+        const allInputs = form.querySelectorAll('input, textarea, select');
+
+        // Load saved data
+        window.addEventListener('load', () => {
+            allInputs.forEach(input => {
+                const savedValue = localStorage.getItem(input.name);
+                if (savedValue && input.type === 'checkbox') {
+                    const values = JSON.parse(savedValue);
+                    if (values.includes(input.value)) input.checked = true;
+                } else if (savedValue && input.type === 'radio') {
+                    if (input.value === savedValue) input.checked = true;
+                } else if (savedValue) {
+                    input.value = savedValue;
+                }
+            });
+            updateProgress();
+        });
+
+        // Auto-save on change
+        allInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                if (input.type === 'checkbox') {
+                    const checkboxes = form.querySelectorAll(`input[name="${input.name}"]:checked`);
+                    const values = Array.from(checkboxes).map(cb => cb.value);
+                    localStorage.setItem(input.name, JSON.stringify(values));
+                } else {
+                    localStorage.setItem(input.name, input.value);
+                }
+                updateProgress();
+            });
+        });
+
+        // Progress bar
+        function updateProgress() {
+            const total = allInputs.length;
+            let filled = 0;
+
+            allInputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    const checkboxes = form.querySelectorAll(`input[name="${input.name}"]:checked`);
+                    if (checkboxes.length > 0) filled++;
+                } else if (input.type === 'radio') {
+                    const radio = form.querySelector(`input[name="${input.name}"]:checked`);
+                    if (radio) filled++;
+                } else if (input.value.trim() !== '') {
+                    filled++;
+                }
+            });
+
+            const percentage = Math.round((filled / total) * 100);
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = percentage + '% Completo';
+        }
+
+        // Conditional fields
+        document.getElementById('problema_qualidade').addEventListener('change', (e) => {
+            const detalhes = document.getElementById('qualidade_detalhes');
+            if (e.target.value.startsWith('Sim')) {
+                detalhes.style.display = 'block';
+            } else {
+                detalhes.style.display = 'none';
+            }
+        });
+
+        document.getElementById('usa_bim').addEventListener('change', (e) => {
+            const importancia = document.getElementById('bim_importancia');
+            if (e.target.value.startsWith('Sim')) {
+                importancia.style.display = 'block';
+            } else {
+                importancia.style.display = 'none';
+            }
+        });
+
+        // Generate codigo automatically
+        window.addEventListener('load', () => {
+            const codigoInput = document.getElementById('codigo');
+            if (!codigoInput.value) {
+                const nextNumber = (parseInt(localStorage.getItem('lastInterviewNumber') || '1')) + 1;
+                codigoInput.value = 'CD-' + String(nextNumber).padStart(3, '0');
+            }
+        });
+
+        // Save progress
+        function saveProgress() {
+            alert('✅ Progresso salvo automaticamente!');
+        }
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            let markdown = '# Formulário de Entrevista - Customer Discovery\n';
+            markdown += '## OF3D Platform - Versão 30 Minutos\n\n';
+            markdown += '---\n\n';
+
+            // Dados da entrevista
+            markdown += '## 📋 DADOS DA ENTREVISTA\n\n';
+            markdown += `**Código da Entrevista:** ${formData.get('codigo')}\n`;
+            markdown += `**Data:** ${formData.get('data')}\n`;
+            markdown += `**Duração:** ${formData.get('duracao')} minutos\n`;
+            markdown += `**Entrevistador:** ${formData.get('entrevistador')}\n\n`;
+            markdown += '---\n\n';
+
+            // Perfil
+            markdown += '## 👤 PERFIL DO ENTREVISTADO\n\n';
+            markdown += `**Nome:** ${formData.get('nome')}\n`;
+            markdown += `**Empresa:** ${formData.get('empresa')}\n`;
+            markdown += `**Cargo:** ${formData.get('cargo')}\n`;
+            markdown += `**Segmento:** ${formData.get('segmento')}\n\n`;
+            markdown += `**Frequência de uso de visualização 3D:** ${formData.get('frequencia')}\n\n`;
+            markdown += `**Budget anual estimado:** ${formData.get('budget')}\n\n`;
+            markdown += '---\n\n';
+
+            // Seção 1
+            markdown += '## 🎯 SEÇÃO 1: CONTEXTO E USO ATUAL\n\n';
+            markdown += `**Último projeto:**\n${formData.get('ultimo_projeto')}\n\n`;
+            const comoEncontra = formData.getAll('como_encontra');
+            markdown += `**Como encontra fornecedores:**\n${comoEncontra.map(v => '- ' + v).join('\n')}\n\n`;
+            markdown += '---\n\n';
+
+            // Seção 2
+            markdown += '## 🔥 SEÇÃO 2: PRINCIPAIS DORES\n\n';
+            markdown += `### 1º MAIOR DESAFIO\n${formData.get('desafio_1')}\n\n`;
+            markdown += `**Impacto:** ${formData.get('desafio_1_impacto')} | **Frequência:** ${formData.get('desafio_1_frequencia')}\n\n`;
+
+            if (formData.get('desafio_2')) {
+                markdown += `### 2º MAIOR DESAFIO\n${formData.get('desafio_2')}\n\n`;
+                markdown += `**Impacto:** ${formData.get('desafio_2_impacto')} | **Frequência:** ${formData.get('desafio_2_frequencia')}\n\n`;
+            }
+
+            if (formData.get('desafio_3')) {
+                markdown += `### 3º MAIOR DESAFIO\n${formData.get('desafio_3')}\n\n`;
+                markdown += `**Impacto:** ${formData.get('desafio_3_impacto')} | **Frequência:** ${formData.get('desafio_3_frequencia')}\n\n`;
+            }
+
+            markdown += `**Problemas com qualidade:** ${formData.get('problema_qualidade')}\n\n`;
+            if (formData.get('qualidade_detalhes')) {
+                markdown += `**Detalhes:** ${formData.get('qualidade_detalhes')}\n\n`;
+            }
+
+            const acompanhamento = formData.getAll('acompanhamento');
+            markdown += `**Como acompanha:** ${acompanhamento.join(', ')}\n\n`;
+            markdown += `**Visibilidade:** ${formData.get('visibilidade')}\n\n`;
+            markdown += `**Clareza de pricing:** ${formData.get('pricing_clareza')}\n\n`;
+            markdown += `**Rodadas de ajuste:** ${formData.get('rodadas_ajuste')}\n\n`;
+            markdown += '---\n\n';
+
+            // Seção 3
+            markdown += '## ✅ SEÇÃO 3: VALIDAÇÃO DE HIPÓTESES\n\n';
+            markdown += `**Match Automático:** ${formData.get('match_automatico')}\n\n`;
+            markdown += `**Sistema de Níveis:** ${formData.get('sistema_niveis')}\n\n`;
+            markdown += `**Tracking Tempo Real:** ${formData.get('tracking_tempo_real')}\n\n`;
+            markdown += `**Pricing Dinâmico:** ${formData.get('pricing_dinamico')}\n\n`;
+            markdown += `**Escrow:** ${formData.get('escrow')}\n\n`;
+            markdown += `**Workflow Guide:** ${formData.get('workflow_guide')}\n\n`;
+            const notificacoes = formData.getAll('notificacoes');
+            markdown += `**Notificações:** ${notificacoes.join(', ')}\n\n`;
+            markdown += `**Usa BIM:** ${formData.get('usa_bim')}\n\n`;
+            if (formData.get('bim_importancia')) {
+                markdown += `**Importância BIM:** ${formData.get('bim_importancia')}\n\n`;
+            }
+            markdown += '---\n\n';
+
+            // Seção 4
+            markdown += '## 💡 SEÇÃO 4: SOLUÇÃO IDEAL\n\n';
+            markdown += `**1ª Característica:** ${formData.get('solucao_ideal_1')}\n\n`;
+            markdown += `**2ª Característica:** ${formData.get('solucao_ideal_2')}\n\n`;
+            markdown += `**3ª Característica:** ${formData.get('solucao_ideal_3')}\n\n`;
+            markdown += `**Willingness to Pay:** ${formData.get('willingness_to_pay')}\n\n`;
+            markdown += `**Justificativa:** ${formData.get('willingness_justificativa')}\n\n`;
+            markdown += '---\n\n';
+
+            // Seção 5
+            markdown += '## 🎯 SEÇÃO 5: ENCERRAMENTO\n\n';
+            markdown += `**Interesse em testar:** ${formData.get('interesse_testar')}\n\n`;
+            markdown += `**Indicações:**\n${formData.get('indicacoes')}\n\n`;
+            const followup = formData.getAll('followup');
+            markdown += `**Follow-up:** ${followup.join(', ')}\n\n`;
+            markdown += `**Email:** ${formData.get('email_contato')}\n\n`;
+            markdown += '---\n\n';
+
+            // Análise
+            markdown += '## 📊 ANÁLISE PÓS-ENTREVISTA\n\n';
+            markdown += `**Early Adopter Score:** ${formData.get('early_adopter_score')}\n\n`;
+            markdown += `**Insights:**\n${formData.get('insights')}\n\n`;
+            markdown += `**Quotes:**\n${formData.get('quotes')}\n\n`;
+            markdown += '---\n\n';
+            markdown += '**FIM DO FORMULÁRIO**\n';
+
+            // Download
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${formData.get('codigo')}-${formData.get('empresa')}-${formData.get('data')}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Update counter
+            const codigo = formData.get('codigo');
+            const number = parseInt(codigo.split('-')[1]);
+            localStorage.setItem('lastInterviewNumber', number);
+
+            // Clear form
+            if (confirm('✅ Arquivo gerado!\n\nDeseja limpar o formulário para próxima entrevista?')) {
+                form.reset();
+                allInputs.forEach(input => {
+                    localStorage.removeItem(input.name);
+                });
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

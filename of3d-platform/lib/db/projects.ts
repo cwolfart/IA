@@ -90,3 +90,10 @@ export async function updateProject(projectId: string, data: Partial<Project>) {
         updatedAt: Date.now()
     });
 }
+
+export async function getAllProjects() {
+    if (!db) return [];
+    const q = query(collection(db, COLLECTION));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+}

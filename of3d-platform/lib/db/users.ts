@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, getDocs, collection } from "firebase/firestore";
 import { User } from "@/lib/types/schema";
 
 const COLLECTION = "users";
@@ -42,4 +42,10 @@ export async function updateUser(uid: string, data: Partial<User>) {
         ...data,
         updatedAt: Date.now(),
     });
+}
+
+export async function getAllUsers() {
+    if (!db) return [];
+    const snapshot = await getDocs(collection(db, COLLECTION));
+    return snapshot.docs.map(doc => doc.data() as User);
 }

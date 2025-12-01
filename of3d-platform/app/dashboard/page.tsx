@@ -81,16 +81,28 @@ export default function DashboardPage() {
             <aside className="w-20 lg:w-64 border-r border-white/10 flex flex-col p-4 hidden md:flex">
                 <div className="h-12 w-12 bg-white rounded-full mb-8 mx-auto lg:mx-0" />
                 <nav className="space-y-4 flex-1">
-                    {['Projects', 'Messages', 'Finances'].map((item) => (
+                    {['Projects', 'Messages'].map((item) => (
                         <button key={item} className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
                             {item}
                         </button>
                     ))}
+                    <Link href="/finances">
+                        <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
+                            Finances
+                        </button>
+                    </Link>
                     <Link href="/profile">
                         <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
                             Settings
                         </button>
                     </Link>
+                    {user?.role === 'ADMIN' && (
+                        <Link href="/admin">
+                            <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-500/10 text-red-400 hover:text-red-300 transition-colors">
+                                Admin Panel
+                            </button>
+                        </Link>
+                    )}
                     <button
                         onClick={() => auth.signOut().then(() => window.location.href = '/login')}
                         className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-500/10 text-red-400 hover:text-red-300 transition-colors mt-auto"

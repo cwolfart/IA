@@ -78,3 +78,32 @@ export interface Notification {
     link?: string;
     createdAt: number;
 }
+
+export type InvoiceStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+
+export interface InvoiceItem {
+    description: string;
+    amount: number;
+}
+
+export interface Invoice {
+    id: string;
+    projectId: string;
+    userId: string; // Client ID
+    number: string; // INV-001
+    amount: number;
+    status: InvoiceStatus;
+    dueDate: number;
+    items: InvoiceItem[];
+    createdAt: number;
+    updatedAt: number;
+}
+
+export interface Payment {
+    id: string;
+    invoiceId: string;
+    amount: number;
+    method: 'CREDIT_CARD' | 'BANK_TRANSFER' | 'PIX';
+    status: 'COMPLETED' | 'FAILED' | 'PROCESSING';
+    createdAt: number;
+}

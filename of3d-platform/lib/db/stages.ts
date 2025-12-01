@@ -14,6 +14,7 @@ import {
 import { ProjectStage, StageStatus } from "@/lib/types/schema";
 import { createNotification } from "@/lib/db/notifications";
 import { getProject } from "@/lib/db/projects";
+import { sendNotificationEmail } from "@/app/actions";
 
 const COLLECTION = "stages";
 
@@ -124,6 +125,14 @@ export async function advanceStage(currentStageId: string) {
                 type: "SUCCESS",
                 link: `/project/${project.id}/review`
             });
+
+            // Send Email
+            await sendNotificationEmail(
+                project.designerId,
+                "Stage Approved!",
+                `Great news! The stage "${currentStage.name}" has been approved by the client.`,
+                `/project/${project.id}/review`
+            );
         }
     } catch (error) {
         console.error("Failed to send notification:", error);

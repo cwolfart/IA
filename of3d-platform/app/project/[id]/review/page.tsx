@@ -15,6 +15,7 @@ import { createComment, subscribeToProjectComments, resolveComment } from "@/lib
 import { getProject, updateProject } from "@/lib/db/projects";
 import { getProjectStages, updateStage, advanceStage } from "@/lib/db/stages";
 import { createNotification } from "@/lib/db/notifications";
+import { sendNotificationEmail } from "@/app/actions";
 import { uploadProjectFile } from "@/lib/storage";
 import { Review, Project, ProjectStage } from "@/lib/types/schema";
 
@@ -183,6 +184,14 @@ export default function ReviewPage() {
                     type: "INFO",
                     link: `/project/${projectId}/review`
                 });
+
+                // Send Email
+                await sendNotificationEmail(
+                    project.clientId,
+                    "New Render Available",
+                    `A new render has been uploaded for stage "${currentStage?.name || 'Project'}". Check it out now!`,
+                    `/project/${projectId}/review`
+                );
             }
         } catch (error) {
             console.error("Error uploading image:", error);

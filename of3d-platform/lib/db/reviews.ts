@@ -13,6 +13,7 @@ import {
 import { Review } from "@/lib/types/schema";
 import { createNotification } from "@/lib/db/notifications";
 import { getProject } from "@/lib/db/projects";
+import { sendNotificationEmail } from "@/app/actions";
 
 const COLLECTION = "reviews";
 
@@ -42,6 +43,14 @@ export async function createComment(data: Omit<Review, "id" | "createdAt" | "upd
                     type: "INFO",
                     link: `/project/${project.id}/review`
                 });
+
+                // Send Email
+                await sendNotificationEmail(
+                    recipientId,
+                    "New Comment on OF3D",
+                    `You have a new comment on project "${project.title}".`,
+                    `/project/${project.id}/review`
+                );
             }
         }
     } catch (error) {

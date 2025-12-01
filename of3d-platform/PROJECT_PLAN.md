@@ -34,7 +34,7 @@
 - [x] **Notifications:** Real-time alerts for comments and status changes.
 - [x] **Version Control:** "Compare V1 vs V2" slider in Review Room.
 - [x] **Multi-Image Support:** Galleries for project stages.
-- [ ] **Profile Settings:** User details and preferences.
+- [x] **Profile Settings:** User details and preferences.
 - [ ] **Email Integration:** (Optional) Send emails on notifications.
 
 ### 🔮 Sprint 6: Financials & Administration (Next)

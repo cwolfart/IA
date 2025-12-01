@@ -4,15 +4,31 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { ArrowRight, Lock } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // TODO: Implement Firebase Auth
-        setTimeout(() => setIsLoading(false), 2000);
+        setError("");
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            router.push("/dashboard");
+        } catch (err: any) {
+            setError("Invalid email or password");
+            console.error(err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -29,10 +45,18 @@ export default function LoginPage() {
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-4">
+                    {error && (
+                        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                            {error}
+                        </div>
+                    )}
+
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Email</label>
                         <input
                             type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
                             placeholder="name@company.com"
                             required
@@ -43,6 +67,8 @@ export default function LoginPage() {
                         <label className="text-sm font-medium text-gray-300">Password</label>
                         <input
                             type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
                             placeholder="••••••••"
                             required

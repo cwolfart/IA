@@ -2,46 +2,79 @@
 
 import { ProjectCard } from "@/components/dashboard/project-card";
 import { VisualTimeline } from "@/components/dashboard/visual-timeline";
+import { AvailableProjectsList } from "@/components/dashboard/available-projects-list";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Bell, Plus, Search, Settings } from "lucide-react";
+import { Bell, Plus, Search } from "lucide-react";
+import { useAuth } from "@/components/auth-provider";
+import { auth } from "@/lib/firebase";
+import { getUserProjects } from "@/lib/db/projects";
+import { useEffect, useState } from "react";
+import { Project, ProjectStage, Notification } from "@/lib/types/schema";
+import { getProjectStages } from "@/lib/db/stages";
+import { subscribeToNotifications, markAllAsRead } from "@/lib/db/notifications";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-// Mock Data
-const PROJECTS = [
-    {
-        id: 1,
-        title: "Modern Villa - Dubai",
-        status: "In Progress",
-        image: "https://images.unsplash.com/photo-1600596542815-2495db98dada?q=80&w=2088&auto=format&fit=crop",
-        date: "Dec 12, 2025",
-        progress: 65,
-    },
-    {
-        id: 2,
-        title: "Tech Office HQ",
-        status: "Review",
-        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop",
-        date: "Nov 28, 2025",
-        progress: 90,
-    },
-    {
-        id: 3,
-        title: "Luxury Apartment",
-        status: "Draft",
-        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop",
-        date: "Jan 05, 2026",
-        progress: 10,
-    },
-];
 
-const ACTIVE_STAGES = [
-    { id: 1, name: "Briefing & Concept", status: "completed" as const },
-    { id: 2, name: "3D Modeling", status: "completed" as const },
-    { id: 3, name: "Texturing & Lighting", status: "current" as const },
-    { id: 4, name: "Draft Render Review", status: "pending" as const },
-    { id: 5, name: "Final Polish", status: "pending" as const },
-];
 
 export default function DashboardPage() {
+    const { user, loading: authLoading } = useAuth();
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [activeProject, setActiveProject] = useState<Project | null>(null);
+    const [activeProjectStages, setActiveProjectStages] = useState<ProjectStage[]>([]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const unreadCount = notifications.filter(n => !n.read).length;
+
+    useEffect(() => {
+        async function fetchProjects() {
+            if (user) {
+                try {
+                    const data = await getUserProjects(user.uid, user.role);
+                    setProjects(data);
+
+                    // Load stages for the first project (Current Focus)
+                    if (data.length > 0) {
+                        const firstProject = data[0];
+                        setActiveProject(firstProject);
+                        const stages = await getProjectStages(firstProject.id);
+                        setActiveProjectStages(stages);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch projects:", error);
+                } finally {
+                    setLoading(false);
+                }
+            } else if (!authLoading) {
+                setLoading(false);
+            }
+        }
+
+        fetchProjects();
+
+        // Subscribe to notifications
+        let unsubscribeNotifications: () => void;
+        if (user) {
+            unsubscribeNotifications = subscribeToNotifications(user.uid, (data) => {
+                setNotifications(data);
+            });
+        }
+
+        return () => {
+            if (unsubscribeNotifications) unsubscribeNotifications();
+        };
+    }, [user, authLoading]);
+
+    if (loading || authLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-white">Loading dashboard...</div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-background font-[family-name:var(--font-outfit)] flex">
             {/* Sidebar (Simplified) */}
@@ -53,6 +86,12 @@ export default function DashboardPage() {
                             {item}
                         </button>
                     ))}
+                    <button
+                        onClick={() => auth.signOut().then(() => window.location.href = '/login')}
+                        className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-500/10 text-red-400 hover:text-red-300 transition-colors mt-auto"
+                    >
+                        Sign Out
+                    </button>
                 </nav>
             </aside>
 
@@ -62,19 +101,56 @@ export default function DashboardPage() {
                 <header className="flex justify-between items-center mb-12">
                     <div>
                         <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-                        <p className="text-muted-foreground">Welcome back, Carlos</p>
+                        <p className="text-muted-foreground">Welcome back, {user?.displayName || 'User'}</p>
                     </div>
                     <div className="flex gap-4">
                         <button className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white">
                             <Search className="w-5 h-5" />
                         </button>
-                        <button className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white relative">
-                            <Bell className="w-5 h-5" />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
-                        </button>
-                        <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:bg-gray-200 flex items-center gap-2">
-                            <Plus className="w-5 h-5" /> New Project
-                        </button>
+                        <div className="relative">
+                            <button
+                                onClick={() => {
+                                    setShowNotifications(!showNotifications);
+                                    if (!showNotifications && unreadCount > 0 && user) {
+                                        markAllAsRead(user.uid);
+                                    }
+                                }}
+                                className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white relative"
+                            >
+                                <Bell className="w-5 h-5" />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                                )}
+                            </button>
+
+                            {showNotifications && (
+                                <div className="absolute right-0 mt-2 w-80 z-50">
+                                    <GlassCard className="max-h-96 overflow-y-auto">
+                                        <h3 className="text-sm font-semibold text-white mb-4">Notifications</h3>
+                                        <div className="space-y-3">
+                                            {notifications.length === 0 ? (
+                                                <p className="text-xs text-muted-foreground text-center py-4">No new notifications</p>
+                                            ) : (
+                                                notifications.map(n => (
+                                                    <div key={n.id} className={cn("p-3 rounded-lg bg-white/5 border border-white/5", !n.read && "border-l-2 border-l-blue-500")}>
+                                                        <p className="text-sm text-white font-medium">{n.title}</p>
+                                                        <p className="text-xs text-muted-foreground mt-1">{n.message}</p>
+                                                        <p className="text-[10px] text-muted-foreground mt-2 text-right">{new Date(n.createdAt).toLocaleTimeString()}</p>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </GlassCard>
+                                </div>
+                            )}
+                        </div>
+                        {user?.role === 'CLIENT' && (
+                            <Link href="/concierge">
+                                <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:bg-gray-200 flex items-center gap-2">
+                                    <Plus className="w-5 h-5" /> New Project
+                                </button>
+                            </Link>
+                        )}
                     </div>
                 </header>
 
@@ -82,29 +158,112 @@ export default function DashboardPage() {
                     {/* Projects Grid */}
                     <div className="lg:col-span-2 space-y-8">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-white">Active Projects</h2>
+                            <h2 className="text-xl font-semibold text-white">
+                                {user?.role === 'DESIGNER' ? 'My Projects' : 'Active Projects'}
+                            </h2>
                             <button className="text-sm text-muted-foreground hover:text-white">View All</button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {PROJECTS.map((project) => (
-                                <ProjectCard key={project.id} {...project} />
-                            ))}
-                        </div>
+
+                        {projects.length === 0 ? (
+                            <div className="text-center py-12 border border-white/10 rounded-xl bg-white/5">
+                                <p className="text-muted-foreground mb-4">
+                                    {user?.role === 'DESIGNER'
+                                        ? "No projects assigned yet."
+                                        : "No projects found."}
+                                </p>
+                                {user?.role === 'CLIENT' && (
+                                    <Link href="/concierge">
+                                        <button className="px-4 py-2 bg-white text-black rounded-lg text-sm font-medium">
+                                            Create your first project
+                                        </button>
+                                    </Link>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {projects.map((project) => (
+                                    <Link key={project.id} href={`/project/${project.id}/review`}>
+                                        <ProjectCard
+                                            title={project.title}
+                                            status={project.currentStageName || project.status}
+                                            image={project.imageUrl || "https://images.unsplash.com/photo-1600596542815-2495db98dada?q=80&w=2088&auto=format&fit=crop"}
+                                            date={new Date(project.createdAt).toLocaleDateString()}
+                                            progress={project.progress || 0}
+                                        />
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Designer: Available Projects to Claim */}
+                        {user?.role === 'DESIGNER' && (
+                            <div className="mt-12 space-y-6">
+                                <h2 className="text-xl font-semibold text-white">Available Projects</h2>
+                                <AvailableProjectsList onClaim={async () => {
+                                    // Refresh projects list
+                                    if (user) {
+                                        const data = await getUserProjects(user.uid, user.role);
+                                        setProjects(data);
+                                    }
+                                }} />
+                            </div>
+                        )}
                     </div>
 
                     {/* Active Project Timeline */}
                     <div className="space-y-8">
-                        <h2 className="text-xl font-semibold text-white">Current Focus</h2>
+                        <h2 className="text-xl font-semibold text-white">Foco Atual</h2>
                         <GlassCard className="h-full">
-                            <div className="mb-6">
-                                <span className="text-xs font-medium text-green-400 bg-green-400/10 px-2 py-1 rounded-md border border-green-400/20">
-                                    On Track
-                                </span>
-                                <h3 className="text-lg font-bold text-white mt-2">Modern Villa - Dubai</h3>
-                                <p className="text-sm text-muted-foreground">Due in 5 days</p>
-                            </div>
-                            <VisualTimeline stages={ACTIVE_STAGES} />
+                            {activeProject ? (
+                                <>
+                                    <div className="mb-6">
+                                        <span className="text-xs font-medium text-green-400 bg-green-400/10 px-2 py-1 rounded-md border border-green-400/20">
+                                            Em Andamento
+                                        </span>
+                                        <h3 className="text-lg font-bold text-white mt-2">{activeProject.title}</h3>
+                                        <p className="text-sm text-muted-foreground">
+                                            {activeProject.currentStageName || "Iniciando..."}
+                                        </p>
+                                    </div>
+                                    <VisualTimeline stages={activeProjectStages.map(s => ({
+                                        id: s.stageNumber,
+                                        name: s.name,
+                                        status: s.status === 'APPROVED' ? 'completed' :
+                                            (s.status === 'IN_PROGRESS' || s.status === 'REVIEW') ? 'current' : 'pending'
+                                    }))} />
+                                </>
+                            ) : (
+                                <div className="text-center py-12 text-muted-foreground">
+                                    Nenhum projeto ativo no momento.
+                                </div>
+                            )}
                         </GlassCard>
+                    </div>
+                </div>
+                {/* Dev Tool: Role Switcher */}
+                <div className="fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg border border-white/10 backdrop-blur-md z-50">
+                    <p className="text-xs text-muted-foreground mb-2">Dev Tools</p>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs">Current: <span className="font-bold text-blue-400">{user?.role}</span></span>
+                        <button
+                            onClick={async () => {
+                                if (!user) return;
+                                const newRole = user.role === 'CLIENT' ? 'DESIGNER' : 'CLIENT';
+                                try {
+                                    // We need to import updateUser dynamically or move this logic
+                                    // For simplicity in this view, we'll assume updateUser is available or imported
+                                    // Note: In a real app, this would be an admin function
+                                    const { updateUser } = await import("@/lib/db/users");
+                                    await updateUser(user.uid, { role: newRole });
+                                    window.location.reload(); // Force reload to refresh auth context
+                                } catch (e) {
+                                    console.error(e);
+                                }
+                            }}
+                            className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-xs transition-colors"
+                        >
+                            Switch to {user?.role === 'CLIENT' ? 'DESIGNER' : 'CLIENT'}
+                        </button>
                     </div>
                 </div>
             </main>

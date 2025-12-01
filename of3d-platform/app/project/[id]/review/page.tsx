@@ -2,6 +2,7 @@
 
 import { CanvasViewer } from "@/components/review/canvas-viewer";
 import { CommentPin } from "@/components/review/comment-pin";
+import { VersionSlider } from "@/components/review/version-slider";
 import { GlassCard } from "@/components/ui/glass-card";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, Check, MessageSquare, Send, X } from "lucide-react";
@@ -28,6 +29,7 @@ export default function ReviewPage() {
     const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
     const [newPin, setNewPin] = useState<{ x: number; y: number } | null>(null);
     const [newCommentText, setNewCommentText] = useState("");
+    const [isCompareMode, setIsCompareMode] = useState(false);
 
     const handlePinClick = (x: number, y: number) => {
         setNewPin({ x, y });
@@ -68,8 +70,16 @@ export default function ReviewPage() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium hover:bg-white/20 transition-colors">
-                        Compare V1
+                    <button
+                        onClick={() => setIsCompareMode(!isCompareMode)}
+                        className={cn(
+                            "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+                            isCompareMode
+                                ? "bg-white text-black hover:bg-gray-200"
+                                : "bg-white/10 text-white hover:bg-white/20"
+                        )}
+                    >
+                        {isCompareMode ? "Exit Compare" : "Compare V1"}
                     </button>
                     <button className="px-4 py-2 rounded-full bg-white text-black text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-2">
                         <Check className="w-4 h-4" /> Approve Stage
@@ -81,30 +91,37 @@ export default function ReviewPage() {
             <div className="flex-1 flex relative">
                 {/* Canvas */}
                 <div className="flex-1 relative">
-                    <CanvasViewer imageUrl={MOCK_IMAGE} onPinClick={handlePinClick}>
-                        {comments.map((comment) => (
-                            <CommentPin
-                                key={comment.id}
-                                x={comment.x}
-                                y={comment.y}
-                                number={comment.id}
-                                isSelected={selectedCommentId === comment.id}
-                                onClick={() => {
-                                    setSelectedCommentId(comment.id);
-                                    setNewPin(null);
-                                }}
-                            />
-                        ))}
-                        {newPin && (
-                            <CommentPin
-                                x={newPin.x}
-                                y={newPin.y}
-                                number={comments.length + 1}
-                                isNew
-                                isSelected
-                            />
-                        )}
-                    </CanvasViewer>
+                    {isCompareMode ? (
+                        <VersionSlider
+                            beforeImage="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" // Mock V1
+                            afterImage={MOCK_IMAGE} // Mock V2
+                        />
+                    ) : (
+                        <CanvasViewer imageUrl={MOCK_IMAGE} onPinClick={handlePinClick}>
+                            {comments.map((comment) => (
+                                <CommentPin
+                                    key={comment.id}
+                                    x={comment.x}
+                                    y={comment.y}
+                                    number={comment.id}
+                                    isSelected={selectedCommentId === comment.id}
+                                    onClick={() => {
+                                        setSelectedCommentId(comment.id);
+                                        setNewPin(null);
+                                    }}
+                                />
+                            ))}
+                            {newPin && (
+                                <CommentPin
+                                    x={newPin.x}
+                                    y={newPin.y}
+                                    number={comments.length + 1}
+                                    isNew
+                                    isSelected
+                                />
+                            )}
+                        </CanvasViewer>
+                    )}
                 </div>
 
                 {/* Sidebar (Comments) */}

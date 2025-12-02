@@ -19,6 +19,10 @@ Moving forward, we will strictly follow the **Feature Branch Workflow**:
 - [x] **Payment Gateway:** Integrate Stripe or Pagar.me for real transactions.
 - [ ] **File Versioning:** Advanced file history for assets (not just images).
 
+### 🔮 Future / Backlog
+- [ ] **Stripe Configuration:** Set up production keys and webhooks.
+- [ ] **Mobile App:** Native wrapper for iOS/Android.
+
 ### 🎨 Sprint 8: Visual Excellence (The "Wow" Factor)
 **Goal:** A dedicated sprint to elevate the UI/UX to world-class standards.
 - [ ] **UI Overhaul:** Refine spacing, typography, and glassmorphism effects based on user feedback.

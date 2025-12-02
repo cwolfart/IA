@@ -5,6 +5,7 @@ import { CommentPin } from "@/components/review/comment-pin";
 import { VersionSlider } from "@/components/review/version-slider";
 import { ImageGallery } from "@/components/review/image-gallery";
 import { ChatPanel } from "@/components/chat/chat-panel";
+import { FilesPanel } from "@/components/files/files-panel";
 import { GlassCard } from "@/components/ui/glass-card";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, Check, MessageSquare, Send, X, Loader2, Upload, Image as ImageIcon } from "lucide-react";
@@ -38,7 +39,7 @@ export default function ReviewPage() {
     const [isCompareMode, setIsCompareMode] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'comments' | 'chat'>('comments');
+    const [activeTab, setActiveTab] = useState<'comments' | 'chat' | 'files'>('comments');
 
     // Temporary state to hold the uploaded image URL for this session
     // In a real app, this would be stored in the Project or ProjectStage document
@@ -353,9 +354,20 @@ export default function ReviewPage() {
                         >
                             Chat
                         </button>
+                        <button
+                            onClick={() => setActiveTab('files')}
+                            className={cn(
+                                "flex-1 py-3 text-sm font-medium transition-colors border-b-2",
+                                activeTab === 'files' ? "border-white text-white" : "border-transparent text-muted-foreground hover:text-white"
+                            )}
+                        >
+                            Files
+                        </button>
                     </div>
 
-                    {activeTab === 'chat' ? (
+                    {activeTab === 'files' ? (
+                        <FilesPanel projectId={projectId} />
+                    ) : activeTab === 'chat' ? (
                         <ChatPanel projectId={projectId} />
                     ) : (
                         <div className="flex-1 overflow-y-auto p-4 space-y-4">

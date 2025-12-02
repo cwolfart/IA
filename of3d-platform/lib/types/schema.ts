@@ -88,6 +88,18 @@ export interface Message {
     readBy: string[];
 }
 
+export interface ProjectFile {
+    id: string;
+    projectId: string;
+    name: string;
+    url: string;
+    type: 'IMAGE' | 'DOCUMENT' | 'CAD' | 'OTHER';
+    size: number;
+    uploadedBy: string;
+    createdAt: number;
+    version: number;
+}
+
 export type InvoiceStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
 
 export interface InvoiceItem {

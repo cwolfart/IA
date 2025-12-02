@@ -212,16 +212,19 @@ export default function ReviewPage() {
     }
 
     return (
-        <div className="h-screen flex flex-col bg-black overflow-hidden font-[family-name:var(--font-outfit)]">
+        <div className="h-screen flex flex-col bg-background overflow-hidden font-[family-name:var(--font-outfit)]">
             {/* Header */}
-            <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 bg-black/50 backdrop-blur-md z-50">
+            <header className="h-16 border-b border-white/5 flex items-center justify-between px-6 bg-black/20 backdrop-blur-md z-50 animate-in fade-in slide-in-from-top-4 duration-500">
                 <div className="flex items-center gap-4">
-                    <Link href="/dashboard" className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">
+                    <Link href="/dashboard" className="p-2 hover:bg-white/10 rounded-full text-white transition-all duration-300 hover:scale-105">
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
                     <div>
-                        <h1 className="text-white font-semibold">{project?.title || "Project Review"}</h1>
-                        <p className="text-xs text-muted-foreground">{currentStage?.name || "Loading..."} • {new Date().toLocaleDateString()}</p>
+                        <h1 className="text-white font-semibold tracking-tight">{project?.title || "Project Review"}</h1>
+                        <p className="text-xs text-muted-foreground flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                            {currentStage?.name || "Loading..."}
+                        </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -229,10 +232,10 @@ export default function ReviewPage() {
                         <button
                             onClick={() => setIsCompareMode(!isCompareMode)}
                             className={cn(
-                                "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+                                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
                                 isCompareMode
-                                    ? "bg-white text-black hover:bg-gray-200"
-                                    : "bg-white/10 text-white hover:bg-white/20"
+                                    ? "bg-white text-black hover:bg-gray-200 shadow-lg"
+                                    : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
                             )}
                         >
                             {isCompareMode ? "Exit Compare" : `Compare with ${previousStage.name}`}
@@ -241,7 +244,7 @@ export default function ReviewPage() {
                     <button
                         onClick={handleApproveStage}
                         disabled={!currentStage || currentStage.status === 'APPROVED'}
-                        className="px-4 py-2 rounded-full bg-white text-black text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 rounded-full bg-white text-black text-sm font-bold hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
                     >
                         <Check className="w-4 h-4" /> Approve Stage
                     </button>
@@ -251,20 +254,20 @@ export default function ReviewPage() {
             {/* Main Area */}
             <div className="flex-1 flex relative">
                 {/* Canvas */}
-                <div className="flex-1 relative bg-[#050505]">
+                <div className="flex-1 relative bg-[#050505] animate-in fade-in duration-700">
                     {!activeImageUrl ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
                             <div className="max-w-md w-full text-center space-y-6">
-                                <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto border border-white/10">
+                                <div className="w-24 h-24 rounded-2xl bg-white/5 flex items-center justify-center mx-auto border border-white/10 shadow-2xl">
                                     <ImageIcon className="w-10 h-10 text-muted-foreground" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-semibold text-white mb-2">No Render Uploaded</h2>
+                                    <h2 className="text-2xl font-bold text-white mb-2">No Render Uploaded</h2>
                                     <p className="text-muted-foreground">Upload a render to start the review process.</p>
                                 </div>
                                 <div
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="border-2 border-dashed border-white/10 rounded-xl bg-white/5 p-8 cursor-pointer hover:bg-white/10 transition-all group"
+                                    className="border-2 border-dashed border-white/10 rounded-2xl bg-white/5 p-10 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all group duration-300"
                                 >
                                     <input
                                         type="file"
@@ -274,15 +277,19 @@ export default function ReviewPage() {
                                         onChange={handleImageUpload}
                                     />
                                     {isUploading ? (
-                                        <div className="flex flex-col items-center gap-3">
+                                        <div className="flex flex-col items-center gap-4">
                                             <Loader2 className="w-8 h-8 text-white animate-spin" />
                                             <span className="text-sm text-muted-foreground">Uploading render...</span>
                                         </div>
                                     ) : (
-                                        <div className="flex flex-col items-center gap-3">
-                                            <Upload className="w-8 h-8 text-muted-foreground group-hover:text-white transition-colors" />
-                                            <span className="text-sm font-medium text-white">Click to upload render</span>
-                                            <span className="text-xs text-muted-foreground">JPG, PNG up to 20MB</span>
+                                        <div className="flex flex-col items-center gap-4">
+                                            <div className="p-4 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
+                                                <Upload className="w-8 h-8 text-muted-foreground group-hover:text-white transition-colors" />
+                                            </div>
+                                            <div>
+                                                <span className="text-sm font-bold text-white block mb-1">Click to upload render</span>
+                                                <span className="text-xs text-muted-foreground">JPG, PNG up to 20MB</span>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -334,35 +341,22 @@ export default function ReviewPage() {
                 </div>
 
                 {/* Sidebar (Comments/Chat) */}
-                <div className="w-80 border-l border-white/10 bg-[#0a0a0a] flex flex-col">
-                    <div className="flex border-b border-white/10">
-                        <button
-                            onClick={() => setActiveTab('comments')}
-                            className={cn(
-                                "flex-1 py-3 text-sm font-medium transition-colors border-b-2",
-                                activeTab === 'comments' ? "border-white text-white" : "border-transparent text-muted-foreground hover:text-white"
-                            )}
-                        >
-                            Comments ({comments.length})
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('chat')}
-                            className={cn(
-                                "flex-1 py-3 text-sm font-medium transition-colors border-b-2",
-                                activeTab === 'chat' ? "border-white text-white" : "border-transparent text-muted-foreground hover:text-white"
-                            )}
-                        >
-                            Chat
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('files')}
-                            className={cn(
-                                "flex-1 py-3 text-sm font-medium transition-colors border-b-2",
-                                activeTab === 'files' ? "border-white text-white" : "border-transparent text-muted-foreground hover:text-white"
-                            )}
-                        >
-                            Files
-                        </button>
+                <div className="w-96 border-l border-white/5 bg-black/40 backdrop-blur-xl flex flex-col z-20 shadow-2xl animate-in slide-in-from-right-8 duration-500">
+                    <div className="flex border-b border-white/5 p-1">
+                        {['comments', 'chat', 'files'].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab as any)}
+                                className={cn(
+                                    "flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all rounded-lg",
+                                    activeTab === tab
+                                        ? "bg-white/10 text-white shadow-sm"
+                                        : "text-muted-foreground hover:text-white hover:bg-white/5"
+                                )}
+                            >
+                                {tab}
+                            </button>
+                        ))}
                     </div>
 
                     {activeTab === 'files' ? (
@@ -373,24 +367,27 @@ export default function ReviewPage() {
                         <div className="flex-1 overflow-y-auto p-4 space-y-4">
                             {/* New Comment Form */}
                             {newPin && (
-                                <GlassCard className="bg-blue-500/10 border-blue-500/30 animate-in slide-in-from-right-4">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-bold text-blue-400">New Comment #{comments.length + 1}</span>
-                                        <button onClick={() => setNewPin(null)} className="text-muted-foreground hover:text-white">
-                                            <X className="w-3 h-3" />
+                                <GlassCard className="bg-blue-500/10 border-blue-500/30 animate-in slide-in-from-right-4 duration-300">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <span className="text-xs font-bold text-blue-400 flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                                            New Comment #{comments.length + 1}
+                                        </span>
+                                        <button onClick={() => setNewPin(null)} className="text-muted-foreground hover:text-white transition-colors">
+                                            <X className="w-4 h-4" />
                                         </button>
                                     </div>
                                     <textarea
                                         value={newCommentText}
                                         onChange={(e) => setNewCommentText(e.target.value)}
                                         placeholder="Type your feedback..."
-                                        className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-sm text-white focus:outline-none focus:border-blue-500/50 min-h-[80px]"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500/50 min-h-[100px] resize-none placeholder:text-white/20"
                                         autoFocus
                                     />
                                     <button
                                         onClick={handleSaveComment}
                                         disabled={isSubmitting}
-                                        className="mt-2 w-full bg-blue-600 text-white text-xs font-bold py-2 rounded-md hover:bg-blue-500 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                        className="mt-3 w-full bg-blue-600 text-white text-xs font-bold py-2.5 rounded-lg hover:bg-blue-500 transition-all flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-lg hover:shadow-blue-500/20"
                                     >
                                         {isSubmitting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
                                         Post Comment
@@ -400,8 +397,11 @@ export default function ReviewPage() {
 
                             {/* Comment List */}
                             {comments.length === 0 && !newPin && (
-                                <div className="text-center py-8 text-muted-foreground text-sm">
-                                    No comments yet. <br /> Click on the image to add one.
+                                <div className="text-center py-12 text-muted-foreground text-sm flex flex-col items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                                        <MessageSquare className="w-5 h-5 opacity-50" />
+                                    </div>
+                                    <p>No comments yet.<br />Click on the image to add one.</p>
                                 </div>
                             )}
 
@@ -410,18 +410,21 @@ export default function ReviewPage() {
                                     key={comment.id}
                                     onClick={() => setSelectedCommentId(comment.id)}
                                     className={cn(
-                                        "p-3 rounded-lg border transition-all cursor-pointer group",
+                                        "p-4 rounded-xl border transition-all cursor-pointer group relative overflow-hidden",
                                         selectedCommentId === comment.id
-                                            ? "bg-white/10 border-white/30"
-                                            : "bg-transparent border-white/5 hover:bg-white/5"
+                                            ? "bg-white/10 border-white/20 shadow-lg"
+                                            : "bg-transparent border-white/5 hover:bg-white/5 hover:border-white/10"
                                     )}
                                 >
-                                    <div className="flex justify-between items-start mb-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-5 h-5 rounded-full bg-white/10 text-white text-[10px] flex items-center justify-center font-bold">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <span className={cn(
+                                                "w-6 h-6 rounded-full text-[10px] flex items-center justify-center font-bold shadow-inner",
+                                                selectedCommentId === comment.id ? "bg-white text-black" : "bg-white/10 text-white"
+                                            )}>
                                                 {index + 1}
                                             </span>
-                                            <span className="text-xs font-medium text-gray-300">User</span>
+                                            <span className="text-xs font-bold text-gray-300">User</span>
                                         </div>
                                         <button
                                             onClick={(e) => {
@@ -429,16 +432,16 @@ export default function ReviewPage() {
                                                 handleResolve(comment.id, comment.resolved);
                                             }}
                                             className={cn(
-                                                "text-[10px] px-1.5 py-0.5 rounded transition-colors",
+                                                "text-[10px] px-2 py-1 rounded-full transition-all font-medium border",
                                                 comment.resolved
-                                                    ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                                                    : "bg-white/5 text-muted-foreground hover:bg-white/10"
+                                                    ? "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20"
+                                                    : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10 hover:text-white"
                                             )}
                                         >
                                             {comment.resolved ? "Resolved" : "Resolve"}
                                         </button>
                                     </div>
-                                    <p className="text-sm text-gray-300 pl-7">{comment.text}</p>
+                                    <p className="text-sm text-gray-300 pl-9 leading-relaxed">{comment.text}</p>
                                 </div>
                             ))}
                         </div>

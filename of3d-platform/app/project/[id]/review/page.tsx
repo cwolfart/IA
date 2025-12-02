@@ -8,7 +8,7 @@ import { ChatPanel } from "@/components/chat/chat-panel";
 import { FilesPanel } from "@/components/files/files-panel";
 import { GlassCard } from "@/components/ui/glass-card";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, Check, MessageSquare, Send, X, Loader2, Upload, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Check, MessageSquare, Send, X, Loader2, Upload, Image as ImageIcon, Menu } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
@@ -40,6 +40,7 @@ export default function ReviewPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [activeTab, setActiveTab] = useState<'comments' | 'chat' | 'files'>('comments');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     // Temporary state to hold the uploaded image URL for this session
     // In a real app, this would be stored in the Project or ProjectStage document
@@ -228,11 +229,17 @@ export default function ReviewPage() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="p-2 hover:bg-white/10 rounded-full text-white transition-all duration-300 md:hidden"
+                    >
+                        {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                    </button>
                     {activeImageUrl && previousStage?.assetsUrl && (
                         <button
                             onClick={() => setIsCompareMode(!isCompareMode)}
                             className={cn(
-                                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hidden md:block",
                                 isCompareMode
                                     ? "bg-white text-black hover:bg-gray-200 shadow-lg"
                                     : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
@@ -246,7 +253,7 @@ export default function ReviewPage() {
                         disabled={!currentStage || currentStage.status === 'APPROVED'}
                         className="px-4 py-2 rounded-full bg-white text-black text-sm font-bold hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
                     >
-                        <Check className="w-4 h-4" /> Approve Stage
+                        <Check className="w-4 h-4" /> <span className="hidden md:inline">Approve Stage</span>
                     </button>
                 </div>
             </header>
@@ -341,7 +348,11 @@ export default function ReviewPage() {
                 </div>
 
                 {/* Sidebar (Comments/Chat) */}
-                <div className="w-96 border-l border-white/5 bg-black/40 backdrop-blur-xl flex flex-col z-20 shadow-2xl animate-in slide-in-from-right-8 duration-500">
+                <div className={cn(
+                    "w-full md:w-96 border-l border-white/5 bg-black/40 backdrop-blur-xl flex flex-col z-40 shadow-2xl transition-all duration-300",
+                    "fixed md:relative inset-y-0 right-0 top-16 md:top-0",
+                    isSidebarOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
+                )}>
                     <div className="flex border-b border-white/5 p-1">
                         {['comments', 'chat', 'files'].map((tab) => (
                             <button

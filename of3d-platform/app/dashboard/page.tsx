@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 
 
 
+import { MobileNav } from "@/components/dashboard/mobile-nav";
+
 export default function DashboardPage() {
     const { user, loading: authLoading } = useAuth();
     const [projects, setProjects] = useState<Project[]>([]);
@@ -124,9 +126,12 @@ export default function DashboardPage() {
             <main className="flex-1 p-8 overflow-y-auto relative z-10">
                 {/* Header */}
                 <header className="flex justify-between items-center mb-12 animate-in fade-in slide-in-from-top-4 duration-700">
-                    <div>
-                        <h1 className="text-4xl font-bold text-white tracking-tight">Dashboard</h1>
-                        <p className="text-muted-foreground mt-1">Welcome back, {user?.displayName || 'User'}</p>
+                    <div className="flex items-center gap-4">
+                        <MobileNav />
+                        <div>
+                            <h1 className="text-4xl font-bold text-white tracking-tight">Dashboard</h1>
+                            <p className="text-muted-foreground mt-1">Welcome back, {user?.displayName || 'User'}</p>
+                        </div>
                     </div>
                     <div className="flex gap-4">
                         <button className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300 hover:scale-105">

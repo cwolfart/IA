@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/auth-provider";
+import { Toaster } from "sonner";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -27,6 +28,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           {children}
+          <Toaster theme="dark" position="top-center" />
         </AuthProvider>
       </body>
     </html>

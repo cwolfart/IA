@@ -79,6 +79,15 @@ export interface Notification {
     createdAt: number;
 }
 
+export interface Message {
+    id: string;
+    projectId: string;
+    senderId: string;
+    text: string;
+    createdAt: number;
+    readBy: string[];
+}
+
 export type InvoiceStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
 
 export interface InvoiceItem {

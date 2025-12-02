@@ -4,6 +4,7 @@ import { CanvasViewer } from "@/components/review/canvas-viewer";
 import { CommentPin } from "@/components/review/comment-pin";
 import { VersionSlider } from "@/components/review/version-slider";
 import { ImageGallery } from "@/components/review/image-gallery";
+import { ChatPanel } from "@/components/chat/chat-panel";
 import { GlassCard } from "@/components/ui/glass-card";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, Check, MessageSquare, Send, X, Loader2, Upload, Image as ImageIcon } from "lucide-react";
@@ -37,6 +38,7 @@ export default function ReviewPage() {
     const [isCompareMode, setIsCompareMode] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'comments' | 'chat'>('comments');
 
     // Temporary state to hold the uploaded image URL for this session
     // In a real app, this would be stored in the Project or ProjectStage document
@@ -330,86 +332,105 @@ export default function ReviewPage() {
                     )}
                 </div>
 
-                {/* Sidebar (Comments) */}
+                {/* Sidebar (Comments/Chat) */}
                 <div className="w-80 border-l border-white/10 bg-[#0a0a0a] flex flex-col">
-                    <div className="p-4 border-b border-white/10">
-                        <h3 className="text-white font-semibold flex items-center gap-2">
-                            <MessageSquare className="w-4 h-4" /> Comments ({comments.length})
-                        </h3>
+                    <div className="flex border-b border-white/10">
+                        <button
+                            onClick={() => setActiveTab('comments')}
+                            className={cn(
+                                "flex-1 py-3 text-sm font-medium transition-colors border-b-2",
+                                activeTab === 'comments' ? "border-white text-white" : "border-transparent text-muted-foreground hover:text-white"
+                            )}
+                        >
+                            Comments ({comments.length})
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('chat')}
+                            className={cn(
+                                "flex-1 py-3 text-sm font-medium transition-colors border-b-2",
+                                activeTab === 'chat' ? "border-white text-white" : "border-transparent text-muted-foreground hover:text-white"
+                            )}
+                        >
+                            Chat
+                        </button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                        {/* New Comment Form */}
-                        {newPin && (
-                            <GlassCard className="bg-blue-500/10 border-blue-500/30 animate-in slide-in-from-right-4">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-xs font-bold text-blue-400">New Comment #{comments.length + 1}</span>
-                                    <button onClick={() => setNewPin(null)} className="text-muted-foreground hover:text-white">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </div>
-                                <textarea
-                                    value={newCommentText}
-                                    onChange={(e) => setNewCommentText(e.target.value)}
-                                    placeholder="Type your feedback..."
-                                    className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-sm text-white focus:outline-none focus:border-blue-500/50 min-h-[80px]"
-                                    autoFocus
-                                />
-                                <button
-                                    onClick={handleSaveComment}
-                                    disabled={isSubmitting}
-                                    className="mt-2 w-full bg-blue-600 text-white text-xs font-bold py-2 rounded-md hover:bg-blue-500 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                                >
-                                    {isSubmitting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
-                                    Post Comment
-                                </button>
-                            </GlassCard>
-                        )}
-
-                        {/* Comment List */}
-                        {comments.length === 0 && !newPin && (
-                            <div className="text-center py-8 text-muted-foreground text-sm">
-                                No comments yet. <br /> Click on the image to add one.
-                            </div>
-                        )}
-
-                        {comments.map((comment, index) => (
-                            <div
-                                key={comment.id}
-                                onClick={() => setSelectedCommentId(comment.id)}
-                                className={cn(
-                                    "p-3 rounded-lg border transition-all cursor-pointer group",
-                                    selectedCommentId === comment.id
-                                        ? "bg-white/10 border-white/30"
-                                        : "bg-transparent border-white/5 hover:bg-white/5"
-                                )}
-                            >
-                                <div className="flex justify-between items-start mb-1">
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-5 h-5 rounded-full bg-white/10 text-white text-[10px] flex items-center justify-center font-bold">
-                                            {index + 1}
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-300">User</span>
+                    {activeTab === 'chat' ? (
+                        <ChatPanel projectId={projectId} />
+                    ) : (
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                            {/* New Comment Form */}
+                            {newPin && (
+                                <GlassCard className="bg-blue-500/10 border-blue-500/30 animate-in slide-in-from-right-4">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="text-xs font-bold text-blue-400">New Comment #{comments.length + 1}</span>
+                                        <button onClick={() => setNewPin(null)} className="text-muted-foreground hover:text-white">
+                                            <X className="w-3 h-3" />
+                                        </button>
                                     </div>
+                                    <textarea
+                                        value={newCommentText}
+                                        onChange={(e) => setNewCommentText(e.target.value)}
+                                        placeholder="Type your feedback..."
+                                        className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-sm text-white focus:outline-none focus:border-blue-500/50 min-h-[80px]"
+                                        autoFocus
+                                    />
                                     <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleResolve(comment.id, comment.resolved);
-                                        }}
-                                        className={cn(
-                                            "text-[10px] px-1.5 py-0.5 rounded transition-colors",
-                                            comment.resolved
-                                                ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                                                : "bg-white/5 text-muted-foreground hover:bg-white/10"
-                                        )}
+                                        onClick={handleSaveComment}
+                                        disabled={isSubmitting}
+                                        className="mt-2 w-full bg-blue-600 text-white text-xs font-bold py-2 rounded-md hover:bg-blue-500 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                                     >
-                                        {comment.resolved ? "Resolved" : "Resolve"}
+                                        {isSubmitting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
+                                        Post Comment
                                     </button>
+                                </GlassCard>
+                            )}
+
+                            {/* Comment List */}
+                            {comments.length === 0 && !newPin && (
+                                <div className="text-center py-8 text-muted-foreground text-sm">
+                                    No comments yet. <br /> Click on the image to add one.
                                 </div>
-                                <p className="text-sm text-gray-300 pl-7">{comment.text}</p>
-                            </div>
-                        ))}
-                    </div>
+                            )}
+
+                            {comments.map((comment, index) => (
+                                <div
+                                    key={comment.id}
+                                    onClick={() => setSelectedCommentId(comment.id)}
+                                    className={cn(
+                                        "p-3 rounded-lg border transition-all cursor-pointer group",
+                                        selectedCommentId === comment.id
+                                            ? "bg-white/10 border-white/30"
+                                            : "bg-transparent border-white/5 hover:bg-white/5"
+                                    )}
+                                >
+                                    <div className="flex justify-between items-start mb-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-5 h-5 rounded-full bg-white/10 text-white text-[10px] flex items-center justify-center font-bold">
+                                                {index + 1}
+                                            </span>
+                                            <span className="text-xs font-medium text-gray-300">User</span>
+                                        </div>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleResolve(comment.id, comment.resolved);
+                                            }}
+                                            className={cn(
+                                                "text-[10px] px-1.5 py-0.5 rounded transition-colors",
+                                                comment.resolved
+                                                    ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                                                    : "bg-white/5 text-muted-foreground hover:bg-white/10"
+                                            )}
+                                        >
+                                            {comment.resolved ? "Resolved" : "Resolve"}
+                                        </button>
+                                    </div>
+                                    <p className="text-sm text-gray-300 pl-7">{comment.text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

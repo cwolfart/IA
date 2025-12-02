@@ -8,11 +8,15 @@ import { cn } from "@/lib/utils";
 import { ArrowLeft, CreditCard, Download, FileText, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { createCheckoutSession } from "@/app/actions";
 
 export default function FinancesPage() {
     const { user, loading: authLoading } = useAuth();
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [loading, setLoading] = useState(true);
+    const searchParams = useSearchParams();
+    const [processingId, setProcessingId] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchInvoices() {
@@ -33,11 +37,32 @@ export default function FinancesPage() {
         fetchInvoices();
     }, [user, authLoading]);
 
-    const handlePay = async (invoiceId: string) => {
-        // Mock payment flow
-        if (confirm("Simulate successful payment?")) {
-            await updateInvoiceStatus(invoiceId, 'PAID');
-            setInvoices(prev => prev.map(inv => inv.id === invoiceId ? { ...inv, status: 'PAID' } : inv));
+    useEffect(() => {
+        const success = searchParams.get("success");
+        const invoiceId = searchParams.get("invoiceId");
+
+        if (success && invoiceId) {
+            updateInvoiceStatus(invoiceId, 'PAID').then(() => {
+                setInvoices(prev => prev.map(inv => inv.id === invoiceId ? { ...inv, status: 'PAID' } : inv));
+                // Clean URL
+                window.history.replaceState(null, "", "/finances");
+            });
+        }
+    }, [searchParams]);
+
+    const handlePay = async (invoice: Invoice) => {
+        setProcessingId(invoice.id);
+        try {
+            const result = await createCheckoutSession(invoice.id, invoice.amount, `Invoice #${invoice.number}`);
+            if (result.url) {
+                window.location.href = result.url;
+            } else {
+                alert("Payment failed to initialize. Check console.");
+            }
+        } catch (error) {
+            console.error("Payment error:", error);
+        } finally {
+            setProcessingId(null);
         }
     };
 
@@ -139,10 +164,16 @@ export default function FinancesPage() {
                                             </button>
                                             {invoice.status === 'PENDING' && (
                                                 <button
-                                                    onClick={() => handlePay(invoice.id)}
-                                                    className="px-4 py-2 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+                                                    onClick={() => handlePay(invoice)}
+                                                    disabled={!!processingId}
+                                                    className="px-4 py-2 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 disabled:opacity-50"
                                                 >
-                                                    <CreditCard className="w-4 h-4" /> Pay Now
+                                                    {processingId === invoice.id ? (
+                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                    ) : (
+                                                        <CreditCard className="w-4 h-4" />
+                                                    )}
+                                                    Pay Now
                                                 </button>
                                             )}
                                         </div>

@@ -31,6 +31,14 @@ Get this API key from your Resend Dashboard.
 RESEND_API_KEY=re_123456789
 ```
 
+### Payment Configuration (Stripe)
+Get these keys from your Stripe Dashboard.
+
+```env
+STRIPE_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+```
+
 ### Application URL
 Used for generating links in emails.
 

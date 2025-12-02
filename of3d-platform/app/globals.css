@@ -2,8 +2,8 @@
 
 :root {
   /* Brand Colors - Premium Dark Aesthetic */
-  --background: #050505;
-  --foreground: #fafafa;
+  --background: #030303; /* Deeper black */
+  --foreground: #ffffff;
   
   --card: #0a0a0a;
   --card-foreground: #ffffff;
@@ -14,11 +14,11 @@
   --primary: #ffffff;
   --primary-foreground: #000000;
   
-  --secondary: #1a1a1a;
+  --secondary: #121212;
   --secondary-foreground: #ffffff;
   
   --muted: #1a1a1a;
-  --muted-foreground: #a1a1aa;
+  --muted-foreground: #a3a3a3; /* Slightly lighter for better readability */
   
   --accent: #262626;
   --accent-foreground: #ffffff;
@@ -30,7 +30,7 @@
   --input: #262626;
   --ring: #ffffff;
   
-  --radius: 0.5rem;
+  --radius: 0.75rem; /* More rounded corners */
 }
 
 @theme inline {
@@ -65,16 +65,47 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, transparent 70%); /* Subtle top spotlight */
+  min-height: 100vh;
 }
 
 /* Glassmorphism Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .glass-hover:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.glass-strong {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

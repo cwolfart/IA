@@ -11,12 +11,18 @@ export function GlassCard({ children, className, hoverEffect = false }: GlassCar
     return (
         <div
             className={cn(
-                "glass rounded-xl p-6 transition-all duration-300",
-                hoverEffect && "glass-hover cursor-pointer hover:-translate-y-1 hover:shadow-lg",
+                "glass rounded-2xl p-6 transition-all duration-500 relative overflow-hidden group",
+                hoverEffect && "glass-hover cursor-pointer hover:-translate-y-1",
                 className
             )}
         >
-            {children}
+            {/* Subtle Gradient Border Effect */}
+            <div className="absolute inset-0 rounded-2xl p-[1px] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none" />
+
+            {/* Inner Content */}
+            <div className="relative z-10">
+                {children}
+            </div>
         </div>
     );
 }

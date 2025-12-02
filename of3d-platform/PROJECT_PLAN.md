@@ -15,7 +15,7 @@ Moving forward, we will strictly follow the **Feature Branch Workflow**:
 
 ### 🚧 Sprint 7: Advanced Interactions (Next)
 **Goal:** Replace mockups with real-time systems and secure payments.
-- [ ] **Real-time Chat:** Replace comment system with direct messaging (Designer <-> Client).
+- [x] **Real-time Chat:** Replace comment system with direct messaging (Designer <-> Client).
 - [ ] **Payment Gateway:** Integrate Stripe or Pagar.me for real transactions.
 - [ ] **File Versioning:** Advanced file history for assets (not just images).
 

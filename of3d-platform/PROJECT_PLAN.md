@@ -17,7 +17,7 @@ Moving forward, we will strictly follow the **Feature Branch Workflow**:
 **Goal:** Replace mockups with real-time systems and secure payments.
 - [x] **Real-time Chat:** Replace comment system with direct messaging (Designer <-> Client).
 - [x] **Payment Gateway:** Integrate Stripe or Pagar.me for real transactions.
-- [ ] **File Versioning:** Advanced file history for assets (not just images).
+- [x] **File Versioning:** Advanced file history for assets (not just images).
 
 ### 🔮 Future / Backlog
 - [ ] **Stripe Configuration:** Set up production keys and webhooks.
